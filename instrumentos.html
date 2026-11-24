@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instrumentos</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="wrapper">
+  <div class="main">
+    <header class="navbar" id="navbar"></header>
+    <section class="content-wrap">
+      <!-- LISTAR -->
+      <div id="view-list" class="card">
+        <div class="card-header"><h2>Listado De Instrumentos</h2>
+          <button class="btn btn-primary btn-add" id="btn-new" title="Agregar" aria-label="Agregar instrumento"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div>
+        <div class="card-body" id="table"></div>
+      </div>
+
+      <!-- AGREGAR / EDITAR -->
+      <div id="view-form" class="card" hidden>
+        <div class="card-header plain"><h3 id="form-title">Agregar instrumento</h3></div>
+        <form id="form" novalidate>
+          <div class="card-body form-grid">
+            <div class="form-group"><label for="nombre">Nombre <span class="req">(*)</span></label>
+              <input class="form-control" id="nombre" placeholder="Ej: Guitarra acústica FG800" maxlength="60"></div>
+            <div class="form-group"><label for="tipo">Tipo <span class="req">(*)</span></label>
+              <select class="form-control" id="tipo"><option value="">Seleccione...</option>
+                <option>Cuerda</option><option>Viento</option><option>Percusión</option><option>Teclado</option><option>Electrónico</option></select></div>
+            <div class="form-group"><label for="marca">Marca <span class="req">(*)</span></label>
+              <select class="form-control" id="marca"></select></div>
+            <div class="form-group"><label for="precio">Precio (COP) <span class="req">(*)</span></label>
+              <input class="form-control" id="precio" type="number" min="0" step="1000" placeholder="Ej: 1250000"></div>
+            <div class="form-group"><label for="estado">Estado <span class="req">(*)</span></label>
+              <select class="form-control" id="estado"><option>Activo</option><option>Inactivo</option></select></div>
+          </div>
+          <div class="card-footer"><button class="btn btn-primary" type="submit">Registrar</button>
+            <button class="btn btn-danger" type="button" id="btn-back">Atrás</button></div>
+        </form>
+      </div>
+    </section>
+    <footer class="footer" id="footer"></footer>
+  </div>
+</div>
+<script src="js/app.js"></script>
+<script src="js/instrumentos.js"></script>
+</body>
+</html>

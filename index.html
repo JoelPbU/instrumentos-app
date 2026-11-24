@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Armonía · Resumen</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="wrapper">
+  <div class="main">
+    <header class="navbar" id="navbar"></header>
+    <section class="content-wrap">
+      <h1 class="page-title">Resumen general</h1>
+      <p class="page-sub">Así está hoy tu inventario de instrumentos y marcas.</p>
+      <div class="grid-4" id="boxes"></div>
+      <div class="grid-2">
+        <div class="card"><div class="card-header plain"><h3>Instrumentos por marca</h3></div><div class="card-body" id="bars"></div></div>
+        <div class="card"><div class="card-header plain"><h3>Últimos instrumentos agregados</h3></div><div class="card-body" id="last"></div></div>
+      </div>
+    </section>
+    <footer class="footer" id="footer"></footer>
+  </div>
+</div>
+<script src="js/app.js"></script>
+<script>
+buildLayout('dashboard');
+const ins = DB.get('instrumentos'), mar = DB.get('marcas');
+const marcaNombre = id => (mar.find(m => m.id === id) || {}).nombre || '—';
+const activos = ins.filter(i => i.estado === 'Activo').length;
+const valor = ins.reduce((s, i) => s + Number(i.precio), 0);
+const box = (cls, big, label, ic, href) => `<div class="small-box ${cls}"><div class="inner"><h3>${big}</h3><p>${label}</p></div>
+  <div class="ico">${icon(ic)}</div><a class="more" href="${href}">Ver detalle ${icon('arrow')}</a></div>`;
+$('#boxes').innerHTML =
+  box('bg-cyan', ins.length, 'Total Instrumentos', 'music', 'instrumentos.html') +
+  box('bg-green', mar.length, 'Total Marcas', 'tag', 'marcas.html') +
+  box('bg-yellow', activos, 'Instrumentos Activos', 'check', 'instrumentos.html') +
+  box('bg-red', `<span style="font-size:28px">${money(valor)}</span>`, 'Valor del Inventario', 'dollar', 'instrumentos.html');
+
+const counts = mar.map(m => ({ n: m.nombre, c: ins.filter(i => i.marcaId === m.id).length })).sort((a, b) => b.c - a.c);
+const max = Math.max(1, ...counts.map(x => x.c));
+$('#bars').innerHTML = counts.length ? counts.map(x =>
+  `<div class="bar-row"><span>${esc(x.n)}</span><div class="bar-track"><div class="bar-fill" style="width:${x.c / max * 100}%"></div></div><b>${x.c}</b></div>`).join('')
+  : '<p class="empty">Aún no hay marcas.</p>';
+
+const last = ins.slice().sort((a, b) => b.id - a.id).slice(0, 5);
+$('#last').innerHTML = last.length ? `<table class="dt"><thead><tr><th class="nosort">Instrumento</th><th class="nosort">Marca</th><th class="nosort">Precio</th></tr></thead><tbody>` +
+  last.map(i => `<tr><td>${esc(i.nombre)}</td><td>${esc(marcaNombre(i.marcaId))}</td><td>${money(i.precio)}</td></tr>`).join('') + '</tbody></table>'
+  : '<p class="empty">Aún no hay instrumentos.</p>';
+</script>
+</body>
+</html>
